@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: oauth-graphql-playground
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: oauth-graphql-playground-service
+  namespace: oauth-graphql-playground
+  labels:
+    app: oauth-graphql-playground
+spec:
+  ports:
+  - port: 5000
+    name: ui
+  clusterIP: None
+  selector:
+    app: oauth-graphql-playground
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oauth-graphql-playground
+  namespace: oauth-graphql-playground
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oauth-graphql-playground
+  template:
+    metadata:
+      labels:
+        app: oauth-graphql-playground
+    spec:
+      containers:
+        - name: oauth-graphql-playground
+          env:
+            - name: OAUTH_GRAPHQL_PLAYGROUND_DEBUG
+              value: "true"
+            - name: OAUTH_GRAPHQL_PLAYGROUND_CLIENT_ID
+              value: "xxxxxxx"
+            - name: OAUTH_GRAPHQL_PLAYGROUND_CLIENT_SECRET
+              value: "xxxxxxxxx"
+            - name: OAUTH_GRAPHQL_PLAYGROUND_REDIRECT_URL
+              value: "http://changeme/oauth2/callback"
+            - name: OAUTH_GRAPHQL_PLAYGROUND_SCOPES
+              value: "openid,email,profile"
+            - name: OAUTH_GRAPHQL_PLAYGROUND_AUTHORIZATION_URL
+              value: "https://accounts.google.com/o/oauth2/v2/auth"
+            - name: OAUTH_GRAPHQL_PLAYGROUND_TOKEN_URL
+              value: "https://oauth2.googleapis.com/token"
+            - name: OAUTH_GRAPHQL_PLAYGROUND_SESSION_MANAGER
+              value: '{ "name": "cookies", "secret": "xxx-xxx-xxx" }'
+            - name: OAUTH_GRAPHQL_PLAYGROUND_OPEN_ID
+              value: 'true'
+            - name: OAUTH_GRAPHQL_PLAYGROUND_SERVER_ENDPOINT
+              value: 'http://changeme/api/graphql'
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          image: "colemanword/oauth-graphql-playground:v0.0.0"
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 5000
+
+---

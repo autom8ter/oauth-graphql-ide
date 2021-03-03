@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+  oauth-graphql-playground:
+    image: colemanword/oauth-graphql-playground:v0.0.0
+    env_file:
+      - ./.env
+    ports:
+      - "5000:5000"
+    networks:
+      default:
+        aliases:
+          - oauth-graphql-playground
+networks:
+  default:
+
+volumes:
+  default:
