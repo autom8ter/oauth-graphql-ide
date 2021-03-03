@@ -26,14 +26,14 @@ push:
 	git push origin v$(version)
 
 docker-build:
-	@docker build -t colemanword/stategate:v$(version) .
+	@docker build -t colemanword/oauth-graphql-playground:v$(version) .
 
 docker-push:
-	@docker push colemanword/stategate:v$(version)
+	@docker push colemanword/oauth-graphql-playground:v$(version)
 
 
 build: ## build the server to ./bin
 	@mkdir -p bin
-	@cd cmd/stategate; gox -osarch="linux/amd64" -output="../../bin/linux/{{.Dir}}_linux_amd64"
-	@cd cmd/stategate; gox -osarch="darwin/amd64" -output="../../bin/darwin/{{.Dir}}_darwin_amd64"
-	@cd cmd/stategate; gox -osarch="windows/amd64" -output="../../bin/windows/{{.Dir}}_windows_amd64"
+	@gox -osarch="linux/amd64" -output="../../bin/linux/{{.Dir}}_linux_amd64"
+	@gox -osarch="darwin/amd64" -output="../../bin/darwin/{{.Dir}}_darwin_amd64"
+	@gox -osarch="windows/amd64" -output="../../bin/windows/{{.Dir}}_windows_amd64"
