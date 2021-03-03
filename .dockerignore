@@ -1,0 +1,6 @@
+vendor
+.idea
+k8s.yaml
+docker-compose.yml
+*.png
+.env
