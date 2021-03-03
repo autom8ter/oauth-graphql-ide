@@ -19,34 +19,39 @@ type Playground struct {
 }
 
 func NewPlayground(session session2.SessionManager, logger *logger.Logger, playgroundPath string, useIDToken bool, endpoint *url.URL) *Playground {
-	director := func(req *http.Request) {
-		req.URL.Scheme = endpoint.Scheme
-		req.URL.Host = endpoint.Host
-		req.URL.Path = endpoint.Path
-		if _, ok := req.Header["User-Agent"]; !ok {
-			// explicitly disable User-Agent so it's not set to default value
-			req.Header.Set("User-Agent", "")
-		}
-	}
-	p := &Playground{session: session, logger: logger, playgroundPath: playgroundPath, useIDToken: useIDToken, proxy: &httputil.ReverseProxy{}}
-	p.proxy.Director = func(req *http.Request) {
-		fmt.Println(req.URL.String())
+	return &Playground{session: session, logger: logger, playgroundPath: playgroundPath, useIDToken: useIDToken, proxy: &httputil.ReverseProxy{
+		Director: func(req *http.Request) {
+			req.URL.Scheme = endpoint.Scheme
+			req.URL.Host = endpoint.Host
+			req.URL.Path = endpoint.Path
+			if _, ok := req.Header["User-Agent"]; !ok {
+				// explicitly disable User-Agent so it's not set to default value
+				req.Header.Set("User-Agent", "")
+			}
+		},
+	}}
+}
+
+func (p *Playground) Proxy() http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
 		authToken, err := p.session.GetToken(req)
 		if err != nil {
-			director(req)
+			p.logger.Error("failed to proxy request", zap.Error(err))
+			http.Error(w, "unauthorized", http.StatusUnauthorized)
 			return
 		}
 		if authToken == nil {
-			director(req)
+			http.Error(w, "unauthorized", http.StatusUnauthorized)
 			return
 		}
 		if !authToken.Token.Valid() {
-			director(req)
+			http.Error(w, "unauthorized - token expired", http.StatusUnauthorized)
 			return
 		}
 		token, err := p.session.GetToken(req)
 		if err != nil {
-			director(req)
+			p.logger.Error("failed to proxy request", zap.Error(err))
+			http.Error(w, "unauthorized - token expired", http.StatusUnauthorized)
 			return
 		}
 		if p.useIDToken {
@@ -54,15 +59,8 @@ func NewPlayground(session session2.SessionManager, logger *logger.Logger, playg
 		} else {
 			req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token.Token.AccessToken))
 		}
-		director(req)
-		logger.Debug("proxying graphQL request", zap.String("url", req.URL.String()))
-	}
-	return p
-}
-
-func (p *Playground) Proxy() http.HandlerFunc {
-	return func(w http.ResponseWriter, req *http.Request) {
 		p.proxy.ServeHTTP(w, req)
+		p.logger.Debug("proxying graphQL request", zap.String("url", req.URL.String()))
 	}
 }
 

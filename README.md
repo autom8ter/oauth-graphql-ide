@@ -17,9 +17,13 @@ An oauth2 protected [graphQL playground](https://github.com/graphql/graphql-play
 
 ## Installation
 
+### Binary Release
+
+Please see [releases](https://github.com/autom8ter/oauth-graphql-playground/releases/tag/v0.0.1) to download and add the program to your path directly
+
 #### Using Containers
 
-- Docker: `docker pull colemanword:oauth-graphql-playground:v0.0.0`
+- Docker: `docker pull colemanword:oauth-graphql-playground:v0.0.1`
 
 - [sample k8s manifest](k8s.yaml) 
 
@@ -63,6 +67,16 @@ OAUTH_GRAPHQL_PLAYGROUND_OPEN_ID=true
 
 # the graphQL server to connect to (required)
 OAUTH_GRAPHQL_PLAYGROUND_SERVER_ENDPOINT=http://localhost:8080/api/graphql
+
+# CORS options
+OAUTH_GRAPHQL_PLAYGROUND_CORS_ALLOW_ORIGINS=*
+OAUTH_GRAPHQL_PLAYGROUND_CORS_ALLOW_METHODS=POST,GET,PUT,DELETE
+OAUTH_GRAPHQL_PLAYGROUND_CORS_ALLOW_HEADERS=*
+
+# TLS/HTTPS options
+# OAUTH_GRAPHQL_PLAYGROUND_TLS_CERT_FILE=/tmp/certs/oauth-graphql-playground.cert
+# OAUTH_GRAPHQL_PLAYGROUND_TLS_KEY_FILE=/tmp/certs/oauth-graphql-playground.key
+
 ```
 
 ## OAuth Providers
@@ -85,8 +99,8 @@ You also may need to do additional configuration of your OAuth app depending on 
     - authorization url: todo
 
 - [Auth0](https://auth0.com/docs/applications/set-up-an-application)
-    - token url: https://login.microsoftonline.com/${tenant}/oauth2/v2.0/token
-    - authorization url: https://login.microsoftonline.com/${tenant}/oauth2/v2.0/authorize
+    - token url: todo
+    - authorization url: todo
     
 - [Facebook](https://developers.facebook.com/docs/facebook-login/)
     - token url: https://graph.facebook.com/v3.2/oauth/access_token

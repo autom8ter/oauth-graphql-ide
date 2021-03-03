@@ -1,4 +1,4 @@
-version := "0.0.0"
+version := "0.0.1"
 
 .DEFAULT_GOAL := help
 
@@ -34,6 +34,6 @@ docker-push:
 
 build: ## build the server to ./bin
 	@mkdir -p bin
-	@gox -osarch="linux/amd64" -output="../../bin/linux/{{.Dir}}_linux_amd64"
-	@gox -osarch="darwin/amd64" -output="../../bin/darwin/{{.Dir}}_darwin_amd64"
-	@gox -osarch="windows/amd64" -output="../../bin/windows/{{.Dir}}_windows_amd64"
+	@gox -osarch="linux/amd64" -output="bin/linux/{{.Dir}}_linux_amd64"
+	@gox -osarch="darwin/amd64" -output="bin/darwin/{{.Dir}}_darwin_amd64"
+	@gox -osarch="windows/amd64" -output="bin/windows/{{.Dir}}_windows_amd64"
