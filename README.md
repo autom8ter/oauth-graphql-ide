@@ -7,23 +7,24 @@ An oauth2 protected [graphQL playground](https://github.com/graphql/graphql-play
 - [x] Serves [GraphQL Playground](https://github.com/graphql/graphql-playground) user interface `/`
 - [x] Login with [oauth authorization code grant](https://oauth.net/2/grant-types/authorization-code/)
     - automatically redirects the user to login if token is expired or cannot be refreshed
-- [x] Serve local auth proxy to remote graphQL server/endpoint 
+- [x] Serve local session-protected http proxy `/proxy` to a remote graphQL server/endpoint 
     - automatically adds authorization header with oauth bearer token to outbound request
 - [x] Fully Configurable via environmental variables
 - [x] Pluggable session management
     - [x] Cookie-based sessions
     - [ ] Redis-based sessions
+- [x] Secure - token's are not accessible to browser javascript
 
 
 ## Installation
 
 ### Binary Release
 
-Please see [releases](https://github.com/autom8ter/oauth-graphql-playground/releases/tag/v0.0.1) to download and add the program to your path directly
+Please see [releases](https://github.com/autom8ter/oauth-graphql-playground/releases/tag/v0.0.2) to download and add the program to your path directly
 
 #### Using Containers
 
-- Docker: `docker pull colemanword:oauth-graphql-playground:v0.0.1`
+- Docker: `docker pull colemanword:oauth-graphql-playground:v0.0.2`
 
 - [sample k8s manifest](k8s.yaml) 
 

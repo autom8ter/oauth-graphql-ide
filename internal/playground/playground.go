@@ -48,19 +48,16 @@ func (p *Playground) Proxy() http.HandlerFunc {
 			http.Error(w, "unauthorized - token expired", http.StatusUnauthorized)
 			return
 		}
-		token, err := p.session.GetToken(req)
-		if err != nil {
-			p.logger.Error("failed to proxy request", zap.Error(err))
-			http.Error(w, "unauthorized - token expired", http.StatusUnauthorized)
-			return
-		}
 		if p.useIDToken {
-			req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token.IDToken))
+			req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", authToken.IDToken))
 		} else {
-			req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token.Token.AccessToken))
+			req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", authToken.Token.AccessToken))
 		}
+		p.logger.Debug("proxying graphQL request",
+			zap.String("url", req.URL.String()),
+			zap.String("method", req.Method),
+		)
 		p.proxy.ServeHTTP(w, req)
-		p.logger.Debug("proxying graphQL request", zap.String("url", req.URL.String()))
 	}
 }
 
