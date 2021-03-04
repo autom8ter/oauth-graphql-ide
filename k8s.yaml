@@ -69,7 +69,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
-          image: "colemanword/oauth-graphql-playground:v0.0.2"
+          image: "colemanword/oauth-graphql-playground:v0.0.3"
           imagePullPolicy: Always
           ports:
           - containerPort: 5000

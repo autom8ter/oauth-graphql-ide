@@ -20,11 +20,11 @@ An oauth2 protected [graphQL playground](https://github.com/graphql/graphql-play
 
 ### Binary Release
 
-Please see [releases](https://github.com/autom8ter/oauth-graphql-playground/releases/tag/v0.0.2) to download and add the program to your path directly
+Please see [releases](https://github.com/autom8ter/oauth-graphql-playground/releases/tag/v0.0.3) to download and add the program to your path directly
 
 #### Using Containers
 
-- Docker: `docker pull colemanword:oauth-graphql-playground:v0.0.2`
+- Docker: `docker pull colemanword:oauth-graphql-playground:v0.0.3`
 
 - [sample k8s manifest](k8s.yaml) 
 

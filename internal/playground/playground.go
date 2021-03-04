@@ -83,25 +83,8 @@ func (p *Playground) Playground() http.HandlerFunc {
 			}
 			return
 		}
-		token, err := p.session.GetToken(req)
-		if err != nil {
-			p.logger.Error("playground: failed to get token - redirecting", zap.Error(err))
-			if err := p.session.RedirectLogin(w, req); err != nil {
-				p.logger.Error("playground: failed to redirect", zap.Error(err))
-			}
-			return
-		}
 		w.Header().Add("Content-Type", "text/html")
-		if p.useIDToken {
-			playground.Execute(w, map[string]string{
-				"token": token.IDToken,
-			})
-		} else {
-			playground.Execute(w, map[string]string{
-				"token": token.Token.AccessToken,
-			})
-		}
-
+		playground.Execute(w, map[string]string{})
 	}
 }
 
